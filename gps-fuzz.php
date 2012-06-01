@@ -11,7 +11,7 @@ Author: Justin de Vesine
 Version: 1.0
 Author URI: http://wizardmode.com/
 
-Copyright (c) 2011 Justin de Vesine
+Copyright (c) 2012 Justin de Vesine
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of 
 this software and associated documentation files (the "Software"), to deal in 
@@ -67,10 +67,15 @@ function gf_fuzz_gps_file($file) {
 	try {
 		$image = new PelJpeg($file);
 		error_reporting($old);
+		if (!$image) { return; }
 		$exif = $image->getExif();
+		if (!$exif) { return; }
 		$tiff = $exif->getTiff();
+		if (!$tiff) { return; }
 		$ifd0 = $tiff->getIfd();
+		if (!$ifd0) { return; }
 		$gps = $ifd0->getSubIfd(PelIfd::GPS);
+		if (!$gps) { return; }
 		foreach (array(PelTag::GPS_LATITUDE, PelTag::GPS_LONGITUDE, PelTag::GPS_DEST_LATITUDE, PelTag::GPS_DEST_LONGITUDE) as $tag) {
 			$pos = $gps->getEntry($tag);
 			if (is_null($pos)) continue;
